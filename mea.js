@@ -73,5 +73,38 @@ function scheduleCronstyle1(){
     })
 }
 
+function scheduleCronstyle2 () {
+    // 这是用来测试的。
+    schedule.scheduleJob('0 0 10 * * *', function() {
+        request('http://api.goseek.cn/Tools/holiday', function (error, response, body) {
+            if (JSON.parse(body).data === 0) {
+                var content = {
+                    "msgtype": "text",
+                    "text": {
+                        "content": '如果周末被调起，记得修复bug'
+                    }
+                }
+                var  options = {
+                    method: 'post',
+                    url: 'https://oapi.dingtalk.com/robot/send?access_token=bc56764d715a56643323a209102b6c1af29a54e2c2be221368c8c8b4cf2f0a5a',
+                    json: content,
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    }
+                };
+                request(options, function (err, res, body1) {
+                    console.log(options)
+                    if (err) {
+                        console.log('err', err)
+                    }else {
+                        console.log('body1', body1);
+                    }
+                })
+            }
+        })
+    })
+}
+
 scheduleCronstyle();
 scheduleCronstyle1();
+scheduleCronstyle2()
