@@ -46,7 +46,7 @@ function scheduleCronstyle1(){
                 var content = {
                     "msgtype": "text",
                     "text": {
-                        "content": '各位研发老C, 龙哥熊妹提醒各位: 17:00, 我们开始剪辑录屏课啦～ 翻牌子今儿到此结束～'
+                        "content": '各位研发老C, 龙哥熊妹提醒各位: 17:00, 我们开始剪辑录屏课啦～ 翻牌子今儿到此结束～ 登记时间截止至5点，超过此时间的课程，放到第二天的列表里。'
                     },
                     "at": {
                         "isAtAll": true
