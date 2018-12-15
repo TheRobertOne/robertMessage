@@ -1,10 +1,12 @@
 var request = require('request');
 var schedule = require('node-schedule');
+var dayjs = require('dayjs');
 
 function scheduleCronstyle(){
     // 18520829095
     schedule.scheduleJob('0 0 16 * * *', function(){
-        request('http://api.goseek.cn/Tools/holiday', function (error, response, body) {
+	    var url = 'http://api.goseek.cn/Tools/holiday?date=' + dayjs().format('YYYYMMDD');
+        request(url, function (error, response, body) {
             if (JSON.parse(body).data === 0) {
                 var content = {
                     "msgtype": "text",
@@ -41,7 +43,8 @@ function scheduleCronstyle(){
 
 function scheduleCronstyle1(){
     schedule.scheduleJob('0 0 17 * * *', function(){
-        request('http://api.goseek.cn/Tools/holiday', function (error, response, body) {
+	    var url = 'http://api.goseek.cn/Tools/holiday?date=' + dayjs().format('YYYYMMDD');
+        request(url, function (error, response, body) {
             if (JSON.parse(body).data === 0) {
                 var content = {
                     "msgtype": "text",

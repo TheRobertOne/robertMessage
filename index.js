@@ -1,8 +1,10 @@
 var request = require('request');
 var schedule = require('node-schedule');
+var dayjs = require('dayjs');
 
 function scheduleCronstyle(){
     // schedule.scheduleJob('0 0 9 * * *', function(){
+    return
     request('http://v.juhe.cn/weather/index?cityname=2235&dtype=&format=&key=e0b4645d92d6676912c335816b3e9888', function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var result = JSON.parse(body)['result'];
@@ -41,4 +43,17 @@ function scheduleCronstyle(){
     // })
 }
 
-scheduleCronstyle();
+(function scheduleCronstyle1() {
+	schedule.scheduleJob('0 * * * * *', function () {
+        var url = 'http://api.goseek.cn/Tools/holiday?date=' + dayjs().format('YYYYMMDD');
+		request(url, function (error, response, body) {
+		    console.log(1,url)
+		    console.log(2,JSON.parse(body).data)
+        })
+	})
+})()
+
+// (function scheduleCronstyle1() {
+// 	console.log(dayjs().format('YYYYMMDD'))
+// })()
+// scheduleCronstyle();
