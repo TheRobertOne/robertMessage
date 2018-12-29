@@ -1,10 +1,12 @@
 var request = require('request');
 var schedule = require('node-schedule');
+var dayjs = require('dayjs');
 
 function scheduleCronstyle(){
     // 18520829095
     schedule.scheduleJob('0 0 16 * * *', function(){
-        request('http://api.goseek.cn/Tools/holiday', function (error, response, body) {
+	    var url = 'http://api.goseek.cn/Tools/holiday?date=' + dayjs().format('YYYYMMDD');
+        request(url, function (error, response, body) {
             if (JSON.parse(body).data === 0) {
                 var content = {
                     "msgtype": "text",
@@ -41,7 +43,8 @@ function scheduleCronstyle(){
 
 function scheduleCronstyle1(){
     schedule.scheduleJob('0 0 17 * * *', function(){
-        request('http://api.goseek.cn/Tools/holiday', function (error, response, body) {
+	    var url = 'http://api.goseek.cn/Tools/holiday?date=' + dayjs().format('YYYYMMDD');
+        request(url, function (error, response, body) {
             if (JSON.parse(body).data === 0) {
                 var content = {
                     "msgtype": "text",
@@ -76,32 +79,38 @@ function scheduleCronstyle1(){
 function scheduleCronstyle2 () {
     // 这是用来测试的。
     schedule.scheduleJob('0 0 10 * * *', function() {
-        request('http://api.goseek.cn/Tools/holiday', function (error, response, body) {
-            if (JSON.parse(body).data === 0) {
-                var content = {
-                    "msgtype": "text",
-                    "text": {
-                        "content": '如果周末被调起，记得修复bug'
-                    }
-                }
-                var  options = {
-                    method: 'post',
-                    url: 'https://oapi.dingtalk.com/robot/send?access_token=bc56764d715a56643323a209102b6c1af29a54e2c2be221368c8c8b4cf2f0a5a',
-                    json: content,
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    }
-                };
-                request(options, function (err, res, body1) {
-                    console.log(options)
-                    if (err) {
-                        console.log('err', err)
-                    }else {
-                        console.log('body1', body1);
-                    }
-                })
-            }
-        })
+	    var url = 'http://api.goseek.cn/Tools/holiday?date=' + dayjs().format('YYYYMMDD');
+	    var content = {
+		    msgtype: "text",
+		    text: {
+			    content: null
+		    }
+	    }
+	    request(url, function (error, response, body) {
+		    if (JSON.parse(body).data === 0) {
+			    content['text']['content'] = '今天是上班日'
+		    } else if (JSON.parse(body).data === 1) {
+			    content['text']['content'] = '今天是周末'
+		    } else if (JSON.parse(body).data === 2) {
+			    content['text']['content'] = '今天是节假日'
+		    }
+		    var  options = {
+			    method: 'post',
+			    url: 'https://oapi.dingtalk.com/robot/send?access_token=bc56764d715a56643323a209102b6c1af29a54e2c2be221368c8c8b4cf2f0a5a',
+			    json: content,
+			    headers: {
+				    'Content-Type': 'application/json;charset=utf-8'
+			    }
+		    };
+		    request(options, function (err, res, body1) {
+			    console.log(options)
+			    if (err) {
+				    console.log('err', err)
+			    }else {
+				    console.log('body1', body1);
+			    }
+		    })
+	    })
     })
 }
 
