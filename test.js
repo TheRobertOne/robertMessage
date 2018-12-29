@@ -1,38 +1,44 @@
 var request = require('request');
+var schedule = require('node-schedule');
 
-var title = 'tv/s1/1-36-My-Colorful-Birthday';
-
-var text = 'tv/s'+title.slice(0,1)+'/'+title;
-var messageUrl = 'https://courses.abctime.com/'+text+'/debug.html';
-var content = {
-    "msgtype": "link",
-    "link": {
-        "text":text,
-        "title": title,
-        "picUrl": "",
-        "messageUrl": messageUrl
-    }
+function scheduleCronstyle(){
+    // schedule.scheduleJob('0 0 9 * * *', function(){
+    request('http://192.168.30.240:7755/DailyReport', function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(666, body)
+            var temp = body.replace(/\\n/g, '\n');
+            console.log(777, temp)
+            var content = {
+                "msgtype": "text",
+                "text": {
+                    "content": temp
+                },
+                "at": {
+                    "atMobiles": [
+                        // "13670184792"
+                    ],
+                    "isAtAll": true
+                }
+            }
+            var  options = {
+                method: 'post',
+                url: 'https://oapi.dingtalk.com/robot/send?access_token=bc56764d715a56643323a209102b6c1af29a54e2c2be221368c8c8b4cf2f0a5a',
+                json: content,
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            };
+            
+            request(options, function (err, res, body1) {
+                if (err) {
+                    console.log('err', err)
+                }else {
+                    console.log('body1', body1);
+                }
+            })
+        }
+    })
+    // })
 }
-// var content = {
-//     "msgtype": "text",
-//     "text": {
-//         "content": title
-//     }
-// }
-var  options = {
-    method: 'post',
-    url: 'https://oapi.dingtalk.com/robot/send?access_token=44d54c2c17954aaa400f8019567e75980acc0e18465004245da6d0650dcbd582',
-    json: content,
-    headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-    }
-};
 
-request(options, function (err, res, body1) {
-    console.log(options)
-    if (err) {
-        console.log('err', err)
-    }else {
-        // console.log('body1', body1);
-    }
-})
+scheduleCronstyle();
