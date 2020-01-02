@@ -3,16 +3,20 @@ var schedule = require('node-schedule');
 
 function scheduleCronstyle(){
     // schedule.scheduleJob('0 0 9 * * *', function(){
-    request('http://192.168.30.240:7755/DailyReport', function (error, response, body) {
+    request('http://192.168.30.240:7744/DailyReport', function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(666, body)
+            // console.log(666, body)
             var temp = body.replace(/\\n/g, '\n');
-            console.log(777, temp)
+            console.log(666, temp)
+            var params = {
+                "title":"xxx",
+                "text":temp
+    
+        }
+            // console.log(777, temp)
             var content = {
-                "msgtype": "text",
-                "text": {
-                    "content": temp
-                },
+                "msgtype": "markdown",
+                "markdown": params,
                 "at": {
                     "atMobiles": [
                         // "13670184792"
